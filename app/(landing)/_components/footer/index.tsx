@@ -114,16 +114,16 @@ export const Footer = () => {
     return (
         <footer className="block w-full">
             <div className="relative overflow-x-hidden">
-                <div className="relative flex flex-row items-center justify-center">
-                    <div className="w-full bg-indigo-500 h-[370px] translate-y-[185px]"/>
-                    <Image src={'/footer_illustration_v2.svg'} width={50} height={50} alt="Voca Mascot Illustration Footer" className="h-auto w-auto z-50"/>
-                    <div className="w-full bg-indigo-500 h-[370px] translate-y-[185px]"/>
+                <div className="relative flex flex-row items-center justify-center overflow-y-hidden">
+                    <div className="w-full bg-indigo-500 h-[370px] translate-y-[186px] hidden lg:block"/>
+                    <Image src={'/footer_illustration_v2.svg'} width={50} height={50} alt="Voca Mascot Illustration Footer" className="md:h-auto md:w-auto w-full h-full object-cover z-50"/>
+                    <div className="w-full bg-indigo-500 h-[370px] translate-y-[186px] hidden lg:block"/>
                 </div>
             </div>
-            <div className="w-full bg-indigo-500 py-20">
-                <div className="lg:max-w-screen-lg mx-auto flex flex-col gap-20">
-                    <div className="w-full flex flex-row justify-between">
-                        { FOOTER_NAVIGATION.map((item, index) => (<FooterTab key={index} title={item.title} tabElements={item.sublinks}/>)) }
+            <div className="w-full bg-indigo-500 py-20 xl:px-0 px-10">
+                <div className="lg:max-w-screen-lg mx-auto flex flex-col gap-20 ">
+                    <div className="w-full flex flex-row flex-wrap gap-y-10 justify-between">
+                        { FOOTER_NAVIGATION.map((item, index) => (<FooterTab key={index} title={item.title} tabElements={item.sublinks} className="lg:w-auto w-[300px]"/>)) }
                     </div>
                     <div className="w-full h-[2px] bg-indigo-400 rounded-lg"/>
                     <div className="flex flex-row justify-between items-centerr">
@@ -133,7 +133,7 @@ export const Footer = () => {
                                 <span className="text-xl font-extrabold text-white tracking-wide">Vocavue</span>
                             </div>
                         </Link>
-                        <p className="text-white text-sm">Vocavue. All rights reserved.</p>
+                        <p className="text-white text-sm my-auto">Vocavue. All rights reserved.</p>
                     </div>
                 </div>
             </div>  

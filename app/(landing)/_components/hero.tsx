@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export const Hero = () => {
     return (
-        <div className="flex flex-col text-center gap-5">
+        <div className="flex flex-col text-center gap-10">
             <div className="flex gap-5 flex-col items-center">
                 <div>
                     <p className="border-2 m-0 inline-flex py-2 px-4 uppercase text-indigo-600 font-bold text-sm rounded-xl border-indigo-300">Achieve Language Mastery</p>

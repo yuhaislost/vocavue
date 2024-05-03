@@ -2,19 +2,24 @@ import { FeedWrapper } from "@/components/feed-wrapper";
 import { StickyWrapper } from "@/components/sticky-wrapper";
 import { Header } from "./_components/header";
 import { UserProgress } from "@/components/user-progress";
-import { getUserCourseProgress } from "@/database/queries";
+import { getCourseProgress, getLessonPercentage, getUnits, getUserCourseProgress } from "@/database/queries";
 import { redirect } from "next/navigation";
+import { Units } from "./_components/unit";
 
 export default async function LearnPage()
 {
     const userCourseProgressPromise = getUserCourseProgress();
+    const courseProgressPromise = getCourseProgress();
+    const lessonPercentagePromise = getLessonPercentage();
+    const unitsPromise = getUnits();
 
-    const [ userCourseProgress ] = await Promise.all([userCourseProgressPromise]);
+    const [ userCourseProgress, courseProgress, lessonPercentage, units ] = await Promise.all([userCourseProgressPromise, courseProgressPromise, lessonPercentagePromise, unitsPromise]);
 
-    if (!userCourseProgress || !userCourseProgress.activeCourse)
-        {
-            redirect('/courses');
-        }
+    if (!userCourseProgress || !userCourseProgress.activeCourse || !courseProgress)
+    {
+        redirect('/courses');
+    }
+
 
     return (
         <div className="flex flex-row-reverse gap-[48px] lg:px-6">
@@ -23,6 +28,11 @@ export default async function LearnPage()
             </StickyWrapper>
             <FeedWrapper>
                 <Header title={userCourseProgress.activeCourse.title }/>
+                {units.map((unit) => (
+                    <div key={unit.id} className="mb-10">
+                        <Units id={unit.id} order={unit.order} description={unit.description} title={unit.title} lessons={unit.lessons} activeLesson={courseProgress.activeLesson} activeLessonPercentage={lessonPercentage}/>
+                    </div>
+                ))}
             </FeedWrapper>
         </div>
     );

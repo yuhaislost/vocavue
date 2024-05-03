@@ -3,6 +3,7 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { ExitModal } from "@/components/modals/exit-modal";
 
 const nunito = Nunito({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children, }: Readonly<{children: React.Reac
             <html lang="en">
                 <body className={nunito.className}>
                     <Toaster/>
+                    <ExitModal/>
                     {children}
                 </body>
             </html>

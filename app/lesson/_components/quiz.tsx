@@ -6,7 +6,7 @@ import { Header } from "./header";
 import { QuestionBubble } from "./question-bubble";
 import { Challenge } from "./challenge";
 import { Footer } from "./footer";
-import { upsertChallengeProgress } from "@/actions/challenge-progress";
+import { reduceHearts, upsertChallengeProgress } from "@/actions/challenge-progress";
 import { toast } from "sonner";
 
 interface QuizProps {
@@ -90,7 +90,22 @@ export const Quiz = ({ initialPercentage, initialLessonId, initialLessonChalleng
             })
         }
         else {
-            setStatus('wrong');
+            startTransition(() => {
+                reduceHearts(challenge.id!).then((response) => {
+                    if (response?.error === 'hearts')
+                    {
+                        console.error("Missing hearts");
+                        return;
+                    }
+
+                    setStatus("wrong");
+
+                    if (!response?.error)
+                    {
+                        setHearts((prev) => Math.max(prev - 1, 0));
+                    }
+                }).catch(() => toast.error("Something went wrong. Please try again."));
+            });
         }
 
     }
@@ -111,7 +126,7 @@ export const Quiz = ({ initialPercentage, initialLessonId, initialLessonChalleng
                     </div>
                 </div>
             </div>
-            <Footer disabled={!selectedOption} status={status} onCheck={onContinue}/>
+            <Footer disabled={isPending || !selectedOption} status={status} onCheck={onContinue}/>
         </>
     )
 }

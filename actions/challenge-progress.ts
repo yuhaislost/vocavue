@@ -3,8 +3,8 @@
 import { UserProgress } from "@/components/user-progress";
 import db from "@/database/drizzle";
 import { getUserCourseProgress } from "@/database/queries";
-import { challengeOptions, challengeProgress, challengeProgressRelations, challenges, userCourseProgress } from "@/database/schema";
-import { auth, currentUser } from "@clerk/nextjs";
+import { challengeOptions, challengeProgress, challenges, userCourseProgress } from "@/database/schema";
+import { auth } from "@clerk/nextjs";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -89,4 +89,54 @@ export const upsertChallengeProgress = async (challengeId: number, optionsId: nu
     revalidatePath('/quests');
     revalidatePath("/leaderboard");
     revalidatePath(`/lesson/${lessonId}`);
+}
+
+export const reduceHearts = async (challengeId: number) => {
+    const { userId } = await auth();
+
+    if (!userId)
+    {
+        throw new Error("Unauthenticated");
+    }
+
+    const currentUserProgress = await getUserCourseProgress();
+
+    const challenge = await db.query.challenges.findFirst({
+        where: eq(challenges.id, challengeId)
+    });
+
+    if (!challenge)
+    {
+        throw new Error("Challenge not found!");
+    }
+
+    const existingChallengeProgress = await db.query.challengeProgress.findFirst({ where: and(eq(challengeProgress.challengeId, challengeId), eq(challengeProgress.userId, userId))});
+
+    const isPractice = !!existingChallengeProgress;
+
+    if (isPractice)
+    {
+        return { error: "practice"};   
+    }
+
+    if (!currentUserProgress)
+    {
+        throw new Error("User progress not found");
+    }
+
+    if (currentUserProgress.hearts === 0)
+    {
+        return {error: 'hearts'};
+    }
+
+    await db.update(userCourseProgress).set({
+        hearts: Math.max(currentUserProgress.hearts - 1, 0),
+    }).where(eq(userCourseProgress.userId, userId));
+
+    revalidatePath('/shop');
+    revalidatePath('/learn');
+    revalidatePath('/quests');
+    revalidatePath('/leaderboard');
+    revalidatePath(`/lesson/${challenge.lessonId}`);
+
 }

@@ -88,6 +88,20 @@ const main = async () => {
                 order: 2,
                 question: '"the man"'
             },
+            {
+                id: 3,
+                lessonId: 2,
+                type: "ASSIST",
+                order: 1,
+                question: '"the man"'
+            },
+            {
+                id: 4,
+                lessonId: 2,
+                type: "ASSIST",
+                order: 2,
+                question: '"the man"'
+            },
         ]);
 
         await db.insert(schema.challengeOptions).values([
@@ -129,6 +143,48 @@ const main = async () => {
             {
                 id: 6,
                 challengeId: 2,
+                correct: false,
+                text: "el robot",
+                audioSrc: "/voices/es_el_robot.mp3",
+            },
+            {
+                id: 7,
+                challengeId: 3,
+                correct: true,
+                text: "el hombre",
+                audioSrc: "/voices/es_man.mp3",
+            },
+            {
+                id: 8,
+                challengeId: 3,
+                correct: false,
+                text: "la mujer",
+                audioSrc: "/voices/es_la_mujer.mp3",
+            },
+            {
+                id: 9,
+                challengeId: 3,
+                correct: false,
+                text: "el robot",
+                audioSrc: "/voices/es_el_robot.mp3",
+            },
+            {
+                id: 10,
+                challengeId: 4,
+                correct: true,
+                text: "el hombre",
+                audioSrc: "/voices/es_man.mp3",
+            },
+            {
+                id: 11,
+                challengeId: 4,
+                correct: false,
+                text: "la mujer",
+                audioSrc: "/voices/es_la_mujer.mp3",
+            },
+            {
+                id: 12,
+                challengeId: 4,
                 correct: false,
                 text: "el robot",
                 audioSrc: "/voices/es_el_robot.mp3",

@@ -1,0 +1,1 @@
+export const HEART_REFILL_COST = 10;

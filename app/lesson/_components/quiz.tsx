@@ -1,6 +1,6 @@
 'use client';
 
-import { challengeOptions, challenges } from "@/database/schema";
+import { challengeOptions, challenges, userSubscription } from "@/database/schema";
 import { useState, useTransition } from "react";
 import { Header } from "./header";
 import { QuestionBubble } from "./question-bubble";
@@ -23,7 +23,7 @@ interface QuizProps {
         challengeOptions: typeof challengeOptions.$inferInsert[];
     })[];
     initialHearts: number;
-    userSubscription: any;
+    userSubscription: typeof userSubscription.$inferSelect & { isActive: boolean; } | null;
 };
 
 export const Quiz = ({ initialPercentage, initialLessonId, initialLessonChallenges, initialHearts, userSubscription} : QuizProps) => {

@@ -2,7 +2,7 @@
 
 import { UserProgress } from "@/components/user-progress";
 import db from "@/database/drizzle";
-import { getUserCourseProgress } from "@/database/queries";
+import { getUserCourseProgress, getUserSubscription } from "@/database/queries";
 import { challengeOptions, challengeProgress, challenges, userCourseProgress } from "@/database/schema";
 import { auth } from "@clerk/nextjs";
 import { and, eq } from "drizzle-orm";
@@ -26,6 +26,7 @@ export const upsertChallengeProgress = async (challengeId: number, optionsId: nu
     }
 
     const currentUserProgress = await getUserCourseProgress();
+    const userSubscription = await getUserSubscription();
 
     if (!currentUserProgress)
     {
@@ -51,7 +52,7 @@ export const upsertChallengeProgress = async (challengeId: number, optionsId: nu
 
     const isPractice = !!existingChallengeProgress;
 
-    if (currentUserProgress.hearts === 0 && !isPractice)
+    if (currentUserProgress.hearts === 0 && !isPractice && !userSubscription?.isActive)
     {
         return { error: "hearts"};
     }
@@ -100,6 +101,7 @@ export const reduceHearts = async (challengeId: number) => {
     }
 
     const currentUserProgress = await getUserCourseProgress();
+    const userSubscription = await getUserSubscription();
 
     const challenge = await db.query.challenges.findFirst({
         where: eq(challenges.id, challengeId)
@@ -122,6 +124,11 @@ export const reduceHearts = async (challengeId: number) => {
     if (!currentUserProgress)
     {
         throw new Error("User progress not found");
+    }
+
+    if (userSubscription?.isActive)
+    {
+        throw new Error("User has subscription!");
     }
 
     if (currentUserProgress.hearts === 0)

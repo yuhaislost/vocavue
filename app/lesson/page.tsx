@@ -1,4 +1,4 @@
-import { getLesson, getUserCourseProgress } from "@/database/queries";
+import { getLesson, getUserCourseProgress, getUserSubscription } from "@/database/queries";
 import { redirect } from "next/navigation";
 import { Quiz } from "./_components/quiz";
 
@@ -7,8 +7,9 @@ const LessonPage = async () => {
     const lessonPromise = getLesson();
 
     const userProgressPromise = getUserCourseProgress();
+    const userSubscriptionPromise = getUserSubscription();
 
-    const [lesson, userProgress] = await Promise.all([lessonPromise, userProgressPromise]);
+    const [lesson, userProgress, userSubscription] = await Promise.all([lessonPromise, userProgressPromise, userSubscriptionPromise]);
 
     if (!lesson || !userProgress)
     {
@@ -18,7 +19,7 @@ const LessonPage = async () => {
     const initialPercentage = lesson.challenges.filter((challenge) => challenge.completed).length / lesson.challenges.length * 100;
 
     return (
-        <Quiz initialLessonId={lesson.id} initialLessonChallenges={lesson.challenges} initialHearts={userProgress.hearts} initialPercentage={initialPercentage} userSubscription={null}/>
+        <Quiz initialLessonId={lesson.id} initialLessonChallenges={lesson.challenges} initialHearts={userProgress.hearts} initialPercentage={initialPercentage} userSubscription={userSubscription}/>
     );
 }
 

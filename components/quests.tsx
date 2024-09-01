@@ -22,7 +22,7 @@ export const Quests = ({ points } : QuestsProps) => {
         }
     }
 
-    const currentQuest = getCurrentQuest
+    const currentQuest = getCurrentQuest(points);
 
     return (
         <div className="border-2 rounded-xl p-4 space-y-4">

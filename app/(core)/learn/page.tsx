@@ -5,6 +5,8 @@ import { UserProgress } from "@/components/user-progress";
 import { getCourseProgress, getLessonPercentage, getUnits, getUserCourseProgress, getUserSubscription } from "@/database/queries";
 import { redirect } from "next/navigation";
 import { Units } from "./_components/unit";
+import { Promotion } from "@/components/promotion";
+import { Quests } from "@/components/quests";
 
 export default async function LearnPage()
 {
@@ -27,6 +29,8 @@ export default async function LearnPage()
         <div className="flex flex-row-reverse gap-[48px] lg:px-6">
             <StickyWrapper>
                 <UserProgress activeCourse={userCourseProgress.activeCourse} hearts={userCourseProgress.hearts} points={userCourseProgress.points} hasActiveSubscription={!!userSubscription?.isActive}/>
+                { !(!!userSubscription?.isActive) && <Promotion/>}
+                <Quests points={userCourseProgress.points}/>
             </StickyWrapper>
             <FeedWrapper>
                 <Header title={userCourseProgress.activeCourse.title }/>

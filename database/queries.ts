@@ -293,3 +293,26 @@ export const getUserSubscription = cache(async () => {
     };
     
 });
+
+export const getTopUsers = cache(async () => {
+    const { userId } = await auth();
+    
+    if (!userId)
+    {
+        return [];
+    
+    }
+    
+    const data = await db.query.userCourseProgress.findMany({
+        orderBy: (userProgress, { desc }) => [userProgress.points],
+        limit: 20, 
+        columns: {
+            userId: true,
+            userName: true,
+            userImageSrc: true,
+            points: true
+        },
+    });
+
+    return data;
+})
